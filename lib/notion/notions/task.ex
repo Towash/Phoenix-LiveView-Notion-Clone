@@ -15,7 +15,9 @@ defmodule Notion.Notions.Task do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :date, :deadline, :completed, :notes])
-    |> validate_required([:title, :date, :deadline, :completed, :notes])
+    |> cast(attrs, [:title])
+    # |> cast(attrs, [:title, :date, :deadline, :completed, :notes])
+    # |> validate_required([:title, :date, :deadline, :completed, :notes])
+    |> validate_required([:title])
   end
 end

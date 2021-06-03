@@ -2,6 +2,7 @@ defmodule Notion.Notions do
   @moduledoc """
   The Notions context.
   """
+  @topic inspect(__MODULE__)
 
   import Ecto.Query, warn: false
   alias Notion.Repo
@@ -53,6 +54,7 @@ defmodule Notion.Notions do
     %Task{}
     |> Task.changeset(attrs)
     |> Repo.insert()
+    |> broadcast_change([:task, :created])
   end
 
   @doc """
@@ -71,6 +73,7 @@ defmodule Notion.Notions do
     task
     |> Task.changeset(attrs)
     |> Repo.update()
+    |> broadcast_change([:task, :updated])
   end
 
   @doc """
@@ -87,6 +90,7 @@ defmodule Notion.Notions do
   """
   def delete_task(%Task{} = task) do
     Repo.delete(task)
+    |> broadcast_change([:task, :deleted])
   end
 
   @doc """
@@ -100,5 +104,14 @@ defmodule Notion.Notions do
   """
   def change_task(%Task{} = task, attrs \\ %{}) do
     Task.changeset(task, attrs)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Notion.PubSub, @topic)
+  end
+
+  defp broadcast_change({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(Notion.PubSub, @topic, {__MODULE__, event, result})
+    {:ok, result}
   end
 end

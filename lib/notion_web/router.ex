@@ -17,7 +17,8 @@ defmodule NotionWeb.Router do
   scope "/", NotionWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    # live "/", PageLive, :index
+    live "/", NotionLive, :index
   end
 
   # Other scopes may use custom stacks.
