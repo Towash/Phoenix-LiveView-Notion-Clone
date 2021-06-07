@@ -10,7 +10,13 @@ defmodule NotionWeb.NotionLive do
 
   def handle_event("add", %{"task" => task}, socket) do
     Notions.create_task(task)
-    {:noreply, fetch(socket)}
+    {:noreply, socket}
+  end
+
+  def handle_event("delete", %{"id" => id}, socket) do
+    task = Notions.get_task!(id)
+    Notions.delete_task(task)
+    {:noreply, socket}
   end
 
   def handle_info({Notions, [:task | _], _}, socket) do
@@ -20,5 +26,4 @@ defmodule NotionWeb.NotionLive do
   defp fetch(socket) do
     assign(socket, tasks: Notions.list_tasks())
   end
-
 end

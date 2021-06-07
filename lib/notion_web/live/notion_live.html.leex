@@ -3,6 +3,18 @@
   <%= submit "Add", phx_disable_with: "Adding..." %>
 </form>
 
-<%= for task <- @tasks do %>
-<div><%= task.title %> <%= task.id %> </div>
-<% end %>
+<table class="container">
+  <tr>
+    <td> Task </td>
+    <td> Id </td>
+  </tr>
+  <%= for task <- @tasks do %>
+    <tr>
+    <div>
+      <td><%= task.title %></td>
+      <td><%= task.id %> </td>
+      <td><button phx-click="delete" phx-value-id=<%= task.id %>>delete</button></td>
+    </div>
+    <% end %>
+  <tr>
+</table>
